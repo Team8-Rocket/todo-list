@@ -20,6 +20,8 @@ const INIT_TODO = [
   },
 ]
 
+
+
 function TodoList() {
   const [todoList, setTodoList] = useState(INIT_TODO)
 
@@ -51,7 +53,8 @@ function TodoList() {
                 <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
                 <CheckIcon />
               </div>
-              <p className={styles.title}>{todo.title}</p>
+              <p className={`${styles.title} ${todo.done?styles.done:''}`}>{todo.title}</p>
+              
             </li>
           ))}
         </ul>

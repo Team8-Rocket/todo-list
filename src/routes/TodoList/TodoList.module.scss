@@ -34,6 +34,7 @@
     background-color: colors.$WHITE;
     border-radius: 32px;
     box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
+    padding: 0 24px 0 0;
 
     + .task {
       margin-top: 18px;
@@ -81,8 +82,35 @@
       color: colors.$TASK_ITEM_TITLE;
       text-overflow: ellipsis;
       white-space: nowrap;
+      position: relative;
+      padding: 0 10px;
+  
+    }
+
+  }
+
+  @keyframes afterWidth{
+    from{
+      width: 0;
+    }
+    to{
+      width: 100%;
     }
   }
+  .done{
+    &::after{
+      content: "";
+      height: 1px;
+      width: 0;
+      top: 50%;
+      left: 0;
+      position: absolute;
+      background-color: black;
+      animation-name: afterWidth;
+      animation-duration: 0.3s;
+      animation-fill-mode: forwards;
+    }
+  } 
 
   .addButton {
     @include position.absolute(auto 40px 40px auto);
