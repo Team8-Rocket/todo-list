@@ -31,38 +31,33 @@ function TodoList() {
   const [isSearchClicked, setIsSearchClicked] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const [debounceTimer, setDebounceTimer] = useState(0)
-  
 
-  useEffect(()=>{
+  useEffect(() => {
     const now = new Date()
-      
     setToday(() => now)
-  },[todoList])
+  }, [todoList])
 
-  const getDDay = (deadLine) =>{
+  const getDDay = (deadLine) => {
     const goal = new Date(`${deadLine}T23:59:00+0900`)
     const difference = goal - today
-    const dDay = Math.floor(difference / (1000*60*60*24))
+    const dDay = Math.floor(difference / (1000 * 60 * 60 * 24))
     return dDay
   }
 
-
-  const search = (value) =>{
-    const newTodo = INIT_TODO.filter(ele => {
-      const title = ele.title.replace(' ','').toLowerCase()
-      const newValue = value.replace(' ','')[0].toLowerCase()
-      return (
-        title.includes(newValue)
-      )
+  const search = (value) => {
+    const newTodo = INIT_TODO.filter((ele) => {
+      const title = ele.title.replace(' ', '').toLowerCase()
+      const newValue = value.replace(' ', '')[0].toLowerCase()
+      return title.includes(newValue)
     })
-    setTodoList(()=> newTodo)
+    setTodoList(() => newTodo)
   }
-  
+
   const deboucingSearch = (text) => {
-    if(debounceTimer){
+    if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
-    const newTimer = setTimeout(async () =>{
+    const newTimer = setTimeout(async () => {
       await search(text)
     }, 200)
     setDebounceTimer(newTimer)
@@ -70,19 +65,19 @@ function TodoList() {
 
   const handleSearchClick = () => {
     clearTimeout(debounceTimer)
-    setSearchValue(()=>'')
-    setIsSearchClicked(prev => !prev)
-    setTodoList(()=>INIT_TODO)
+    setSearchValue(() => '')
+    setIsSearchClicked((prev) => !prev)
+    setTodoList(() => INIT_TODO)
   }
 
   const handleSearchChange = (event) => {
     const text = event.currentTarget.value
     setSearchValue(() => text)
-    if(text!==''){
+    if (text !== '') {
       deboucingSearch(text)
-    }else if(text===''){
+    } else if (text === '') {
       clearTimeout(debounceTimer)
-      setTodoList(()=>INIT_TODO)
+      setTodoList(() => INIT_TODO)
     }
   }
 
@@ -100,17 +95,14 @@ function TodoList() {
 
   return (
     <div className={styles.todoList}>
-      <div 
-        className={
-          `${styles.searchBox} 
-          ${isSearchClicked ? styles.clicked : ''}`
-        }
+      <div
+        className={`${styles.searchBox} 
+          ${isSearchClicked ? styles.clicked : ''}`}
       >
-        <input 
-          className={ `${styles.searchInput} 
-            ${isSearchClicked ? styles.clicked : ''}`
-          }
-          type='text'  
+        <input
+          className={`${styles.searchInput} 
+            ${isSearchClicked ? styles.clicked : ''}`}
+          type='text'
           value={searchValue}
           onChange={handleSearchChange}
           placeholder='search'
@@ -118,27 +110,24 @@ function TodoList() {
         />
       </div>
 
-      <Magnify className={styles.magnify} onClick={handleSearchClick}/>
+      <Magnify className={styles.magnify} onClick={handleSearchClick} />
       <div className={styles.centering}>
         <h1 className={styles.greetings}>Hi! this is your assignment.</h1>
         <ul className={styles.tasks}>
           <p className={styles.tasksTitle}>Today&apos;s</p>
           {todoList.map((todo) => {
             let { deadLine } = todo
-          
+
             const day = getDDay(deadLine)
             return (
-              <li key={`todo-${todo.id}`} className={styles.task} >
-                <div className={styles.checkboxWrapper} >
+              <li key={`todo-${todo.id}`} className={styles.task}>
+                <div className={styles.checkboxWrapper}>
                   <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
                   <CheckIcon />
                 </div>
-                <p className={classNames(styles.title, {[styles.done]:todo.done})}
-                >{todo.title}</p>
-                <span 
-                            
-                  className={classNames(styles.dDay, {[styles.dayRed]:day < 3})}
-                >{day>0?`D-${day}`:`D+${Math.abs(day)}`}
+                <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
+                <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
+                  {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
                 </span>
               </li>
             )
