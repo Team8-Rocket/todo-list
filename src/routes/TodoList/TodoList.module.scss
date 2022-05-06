@@ -3,18 +3,29 @@
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/position';
 
+$CATEGORY_COLOR: (
+  study: red,
+  business: blue,
+  personal: purple,
+  exercise: gold,
+  etc: orange,
+);
+
 .todoList {
   position: relative;
   width: 360px;
   height: 720px;
-  padding: 120px 40px 40px;
+  padding: 120px 0px;
+  // padding: 120px 40px 40px;
   background-color: #fafbfe;
   border-radius: 60px;
+  overflow: hidden;
 
   h1 {
     font-size: 32px;
     font-weight: 600;
     color: colors.$BIG_TITLE;
+    padding-left: 40px;
   }
   .categoryTitle {
     margin: 30px 0 24px;
@@ -23,25 +34,93 @@
     color: colors.$TASKS_TITLE;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    padding-left: 40px;
+  }
+  .categoriesWrapper {
+    height: 100px;
+    overflow: scroll;
+    cursor: pointer;
   }
   .categories {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
-
-    .category {
-      display: flex;
-      flex-direction: column;
-      // align-items: left;
-      justify-content: space-around;
-      line-height: 22px;
-      padding: 10px;
-      width: 250px;
-      height: 100px;
-      background-color: colors.$WHITE;
-      border-radius: 10px;
-      box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
+    // display: flex;
+    // background-color: rebeccapurple;
+    height: 100px;
+  }
+  .category {
+    float: left;
+    line-height: 22px;
+    padding: 20px 15px;
+    width: 180px;
+    height: 100px;
+    background-color: colors.$WHITE;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
+    margin-left: 40px;
+    + .category {
+      // border: 1px solid red;
+      margin-left: 10px;
     }
+  }
+  .categoriesCount {
+    font-size: 12px;
+    font-weight: 600;
+    color: colors.$TASKS_TITLE;
+    letter-spacing: 0.003em;
+    margin-bottom: 2px;
+  }
+  .categoriesTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: colors.$BIG_TITLE;
+    margin-bottom: 10px;
+  }
+  .progressBar {
+    position: relative;
+    top: 3px;
+    width: 0%;
+    height: 3px;
+    background-color: red;
+    transition: 0.2s;
+    box-shadow: 0 3px 5px 0 rgba(colors.$BLACK, 30%);
+    > span {
+      position: relative;
+      top: -4px;
+      left: -2px;
+      margin-left: 100%;
+      display: block;
+      width: 2px;
+      height: 6px;
+      background-color: red;
+    }
+  }
+  .bar {
+    width: 100%;
+    height: 3px;
+    background-color: colors.$GRAYE;
+  }
+
+  .wrapTodo {
+    position: relative;
+  }
+
+  .taskSlide.slide {
+    right: -255px;
+  }
+
+  .taskSlide {
+    @include flexbox.flexbox(center center);
+    position: relative;
+    top: -46px;
+    right: -360px;
+    width: 15px;
+    height: 18px;
+    font-size: 15px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .task.slide {
+    left: -77px;
+    transition: all 0.3s ease-in-out;
   }
 
   .tasksTitle {
@@ -51,9 +130,29 @@
     color: colors.$TASKS_TITLE;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    padding-left: 40px;
+    > span {
+      display: inline-block;
+      padding: 0 10px;
+      line-height: 20px;
+      height: 20px;
+      border-radius: 8px;
+      margin-left: 4px;
+      text-transform: uppercase;
+      color: colors.$TASKS_TITLE;
+      background-color: colors.$GRAYE;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  .tasks {
+    height: 280px;
+    overflow-y: scroll;
   }
 
   .task {
+    position: relative;
+    left: 0;
     display: flex;
     align-items: center;
     height: 72px;
@@ -61,6 +160,8 @@
     background-color: colors.$WHITE;
     border-radius: 32px;
     box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
+    margin: 0 40px;
+    transition: all 0.3s ease-in-out;
 
     + .task {
       margin-top: 18px;
@@ -94,13 +195,41 @@
       transition: 0.2s;
 
       &:checked {
-        background-color: colors.$BLUE;
+        // background-color: colors.$BLUE;
         border: 0;
 
         ~ svg {
           opacity: 1;
         }
       }
+    }
+    // @each $key, $color in $CATEGORY_COLOR {
+    //   input[type='checkbox'].#{$key} {
+    //     @include position.middleBox;
+    //     z-index: levels.$CHECK_BOX;
+    //     width: 28px;
+    //     height: 28px;
+    //     cursor: pointer;
+    //     border: 2px solid $color;
+    //     border-radius: 50%;
+    //     transition: 0.2s;
+    //     &:checked {
+    //       background-color: $color;
+    //       border: 0;
+    //       ~ svg {
+    //         opacity: 1;
+    //       }
+    //     }
+    //   }
+    // }
+
+    .wrapTouch {
+      position: absolute;
+      left: 70px;
+      width: 210px;
+      height: 72px;
+      line-height: 72px;
+      cursor: default;
     }
 
     .title {
@@ -109,6 +238,22 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  .editButton {
+    padding: 18px 16px;
+    color: colors.$WHITE;
+    background-color: #cdcdcd;
+    border-radius: 10px 0 0 10px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .deleteButton {
+    padding: 18px 16px;
+    color: colors.$WHITE;
+    background-color: #ff6b6b;
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease-in-out;
   }
 
   .addButton {
