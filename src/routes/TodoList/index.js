@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
 import { useHorizontalScroll } from './useSideScroll'
 
 import classNames from 'classnames/bind'
+import { useNavigate } from 'react-router-dom'
+import TodoListContext from '../../store/todoList-context'
 
 const cx = classNames.bind(styles)
 
@@ -11,56 +13,11 @@ const INIT_CATEGORY = ['Study', 'Business', 'Personal', 'Exercise', 'Etc']
 
 const CATEGORY_COLOR = { Study: 'red', Business: 'blue', Personal: 'purple', Exercise: 'gold', Etc: 'orange' }
 
-const INIT_TODO = [
-  {
-    id: 1,
-    title: '계란 2판 사기',
-    category: 'Study',
-    deadLine: '2022-05-06',
-    done: false,
-  },
-  {
-    id: 2,
-    title: '연봉 4000만원 받기',
-    category: 'Business',
-    deadLine: '2022-05-09',
-    done: false,
-  },
-  {
-    id: 3,
-    title: '헬스장 가서 운동하기',
-    category: 'Exercise',
-    deadLine: '2022-05-11',
-    done: false,
-  },
-  {
-    id: 4,
-    title: 'TypeScript 공부하기',
-    category: 'Study',
-    deadLine: '2022-05-30',
-    done: false,
-  },
-  {
-    id: 5,
-    title: '등산 가기',
-    category: 'Etc',
-    deadLine: '2022-07-16',
-    done: false,
-  },
-  {
-    id: 6,
-    title: '서점 가기',
-    category: 'Etc',
-    deadLine: '2023-05-06',
-    done: false,
-  },
-]
-
 const CATEGORY_WIDTH = 190
 
 function TodoList() {
-  const [category, setCategory] = useState(INIT_CATEGORY)
-  const [todoList, setTodoList] = useState(INIT_TODO)
+  const { todoList, dispatchTodoList } = useContext(TodoListContext)
+  const [category] = useState(INIT_CATEGORY)
   const [filterCategory, setFilterCategory] = useState('All')
 
   const [isTaskLeft, setIsTaskLeft] = useState(false)
@@ -72,17 +29,15 @@ function TodoList() {
 
   const [today, setToday] = useState(new Date())
 
-  const handleAddClick = (e) => {}
+  const navigate = useNavigate()
 
-  const handleChange = (e) => {
+  const handleClickAdd = () => navigate('add')
+
+  const handleChangeDone = (e) => {
     const { dataset, checked } = e.currentTarget
     const { id } = dataset
-    setTodoList((prev) => {
-      const targetIndex = prev.findIndex((todo) => todo.id === Number(id))
-      const newList = [...prev]
-      newList[targetIndex].done = checked
-      return newList
-    })
+
+    dispatchTodoList({ type: 'CHECK_TODO', id, checked })
   }
 
   const handleFilterCategory = (e) => {
@@ -96,14 +51,19 @@ function TodoList() {
     setTaskId(() => todoId)
   }
 
-  const handleEditClick = () => {
+  const handleClickEdit = (e) => {
+    const { id } = e.currentTarget.dataset
+    const targetIndex = todoList.findIndex((todo) => todo.id === id)
+
     setIsTaskLeft((prev) => !prev)
+    navigate('edit', { state: { targetTodo: todoList[targetIndex] } })
   }
 
-  const handleDeleteClick = () => {
-    const deletedTodoList = todoList.filter((todo) => taskId !== todo.id)
+  const handleClickDelete = (e) => {
+    const { id } = e.currentTarget.dataset
+
     setTimeout(() => {
-      setTodoList(() => deletedTodoList)
+      dispatchTodoList({ type: 'DELETE_TODO', id })
     }, 200)
     setIsTaskLeft((prev) => !prev)
   }
@@ -117,12 +77,11 @@ function TodoList() {
   }
 
   const search = (value) => {
-    const newTodo = INIT_TODO.filter((ele) => {
+    const newTodo = todoList.filter((ele) => {
       const title = ele.title.replace(' ', '').toLowerCase()
       const newValue = value.replace(' ', '')[0].toLowerCase()
       return title.includes(newValue)
     })
-    setTodoList(() => newTodo)
   }
 
   const deboucingSearch = (text) => {
@@ -140,7 +99,6 @@ function TodoList() {
 
     setSearchValue(() => '')
     setIsSearchClicked((prev) => !prev)
-    setTodoList(() => INIT_TODO)
   }
 
   const handleSearchChange = (event) => {
@@ -150,7 +108,6 @@ function TodoList() {
       deboucingSearch(text)
     } else if (text === '') {
       clearTimeout(debounceTimer)
-      setTodoList(() => INIT_TODO)
     }
   }
 
@@ -171,13 +128,9 @@ function TodoList() {
 
   return (
     <div className={styles.todoList}>
-      <div
-        className={`${styles.searchBox} 
-          ${isSearchClicked ? styles.clicked : ''}`}
-      >
+      <div className={cx(styles.searchBox, { [styles.clicked]: isSearchClicked })}>
         <input
-          className={`${styles.searchInput} 
-            ${isSearchClicked ? styles.clicked : ''}`}
+          className={cx(styles.searchInput, { [styles.clicked]: isSearchClicked })}
           type='text'
           value={searchValue}
           onChange={handleSearchChange}
@@ -185,11 +138,9 @@ function TodoList() {
           disabled={!isSearchClicked}
         />
       </div>
-
       <Magnify className={styles.magnify} onClick={handleSearchClick} />
       <div className={styles.centering}>
         <h1 className={styles.greetings}>Hi! this is your assignment.</h1>
-
         <p className={styles.categoryTitle}>Categories</p>
         <div className={styles.categoriesWrapper} ref={scrollRef}>
           <ul className={styles.categories} style={{ width: `${CATEGORY_WIDTH * category.length + 70}px` }}>
@@ -218,106 +169,59 @@ function TodoList() {
           Today&apos;s <span>{filterCategory}</span>
         </p>
         <ul className={styles.tasks}>
-          {filterCategory === 'All'
-            ? todoList.map((todo) => {
-                const { deadLine } = todo
+          {todoList.reduce((filterdTodoList, todo) => {
+            if ((filterCategory === 'All' || filterCategory === todo.category) && todo.title.includes(searchValue)) {
+              const { deadline } = todo
+              const day = getDDay(deadline)
 
-                const day = getDDay(deadLine)
-                return (
-                  <div key={`todoWrap-${todo.id}`} className={styles.wrapTodo}>
-                    <li
-                      key={`todo-${todo.id}`}
-                      className={cx(styles.task, { [styles.slide]: isTaskLeft && taskId === todo.id })}
-                    >
-                      <div className={styles.checkboxWrapper}>
-                        <input
-                          type='checkbox'
-                          checked={todo.done}
-                          data-id={todo.id}
-                          onChange={handleChange}
-                          className={todo.category.toLowerCase()}
-                          style={
-                            todo.done
-                              ? { backgroundColor: `${CATEGORY_COLOR[todo.category]}` }
-                              : { border: `2px solid ${CATEGORY_COLOR[todo.category]}` }
-                          }
-                        />
-                        <CheckIcon />
-                      </div>
-                      <button
-                        type='button'
-                        className={styles.wrapTouch}
-                        onClick={(e) => handleTodoClick(e, todo.id)}
-                        aria-label='Todo Slide button'
+              filterdTodoList.push(
+                <div key={`todoWrap-${todo.id}`} className={styles.wrapTodo}>
+                  <li
+                    key={`todo-${todo.id}`}
+                    className={cx(styles.task, { [styles.slide]: isTaskLeft && taskId === todo.id })}
+                  >
+                    <div className={styles.checkboxWrapper}>
+                      <input
+                        type='checkbox'
+                        checked={todo.done}
+                        data-id={todo.id}
+                        onChange={handleChangeDone}
+                        className={todo.category.toLowerCase()}
+                        style={
+                          todo.done
+                            ? { backgroundColor: `${CATEGORY_COLOR[todo.category]}` }
+                            : { border: `2px solid ${CATEGORY_COLOR[todo.category]}` }
+                        }
                       />
-
-                      <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
-                      <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
-                        {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
-                      </span>
-                    </li>
-                    <div className={cx(styles.taskSlide, { [styles.slide]: isTaskLeft && taskId === todo.id })}>
-                      <button type='button' className={styles.editButton} onClick={handleEditClick}>
-                        Edit
-                      </button>
-                      <button type='button' className={styles.deleteButton} onClick={handleDeleteClick}>
-                        Del{' '}
-                      </button>
+                      <CheckIcon />
                     </div>
+                    <button
+                      type='button'
+                      className={styles.wrapTouch}
+                      onClick={(e) => handleTodoClick(e, todo.id)}
+                      aria-label='Todo Slide button'
+                    />
+                    <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
+                    <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
+                      {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
+                    </span>
+                  </li>
+                  <div className={cx(styles.taskSlide, { [styles.slide]: isTaskLeft && taskId === todo.id })}>
+                    <button data-id={todo.id} type='button' className={styles.editButton} onClick={handleClickEdit}>
+                      Edit
+                    </button>
+                    <button data-id={todo.id} type='button' className={styles.deleteButton} onClick={handleClickDelete}>
+                      Del{' '}
+                    </button>
                   </div>
-                )
-              })
-            : todoList.map((todo) => {
-                const { deadLine } = todo
+                </div>
+              )
+            }
 
-                const day = getDDay(deadLine)
-                return filterCategory === todo.category ? (
-                  <div key={`todoWrap-${todo.id}`} className={styles.wrapTodo}>
-                    <li
-                      key={`todo-${todo.id}`}
-                      className={cx(styles.task, { [styles.slide]: isTaskLeft && taskId === todo.id })}
-                    >
-                      <div className={styles.checkboxWrapper}>
-                        <input
-                          type='checkbox'
-                          checked={todo.done}
-                          data-id={todo.id}
-                          onChange={handleChange}
-                          className={todo.category.toLowerCase()}
-                          style={
-                            todo.done
-                              ? { backgroundColor: `${CATEGORY_COLOR[todo.category]}` }
-                              : { border: `2px solid ${CATEGORY_COLOR[todo.category]}` }
-                          }
-                        />
-                        <CheckIcon />
-                      </div>
-                      <button
-                        type='button'
-                        className={styles.wrapTouch}
-                        onClick={(e) => handleTodoClick(e, todo.id)}
-                        aria-label='Todo Slide button'
-                      />
-
-                      <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
-                      <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
-                        {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
-                      </span>
-                    </li>
-                    <div className={cx(styles.taskSlide, { [styles.slide]: isTaskLeft && taskId === todo.id })}>
-                      <button type='button' className={styles.editButton} onClick={handleEditClick}>
-                        Edit
-                      </button>
-                      <button type='button' className={styles.deleteButton} onClick={handleDeleteClick}>
-                        Del{' '}
-                      </button>
-                    </div>
-                  </div>
-                ) : null
-              })}
+            return filterdTodoList
+          }, [])}
         </ul>
-
-        <button type='button' className={styles.addButton} aria-label='Add button' />
+        <button type='button' className={styles.addButton} aria-label='Add button' onClick={handleClickAdd} />
       </div>
     </div>
   )
