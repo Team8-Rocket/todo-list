@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon } from '../../assets/svgs'
 import { useHorizontalScroll } from './useSideScroll'
@@ -109,14 +109,14 @@ function TodoList() {
           </ul>
         </div>
 
+        <p className={styles.tasksTitle}>Today&apos;s <span>{filterCategory}</span></p>
         <ul className={styles.tasks}>
-          <p className={styles.tasksTitle}>Today&apos;s <span>{filterCategory}</span></p>
           {filterCategory === 'All' ? 
             todoList.map((todo) => (
               <li key={`todo-${todo.id}`} className={styles.task}>
                 <div className={styles.checkboxWrapper}>
-                  <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={{border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
-                  <CheckIcon style={{color :`${CATEGORY_COLOR[todo.category]}`}}/>
+                  <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={todo.done ? {backgroundColor :`${CATEGORY_COLOR[todo.category]}`} : {border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
+                  <CheckIcon />
                 </div>
                 <p className={styles.title}>{todo.title}</p>
               </li>
@@ -127,8 +127,8 @@ function TodoList() {
                 filterCategory === todo.category ? 
                   <li key={`todo-${todo.id}`} className={styles.task}>
                     <div className={styles.checkboxWrapper}>
-                      <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={{border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
-                      <CheckIcon style={{color :`${CATEGORY_COLOR[todo.category]}`}}/>
+                      <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={todo.done ? {backgroundColor :`${CATEGORY_COLOR[todo.category]}`} : {border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
+                      <CheckIcon />
                     </div>
                     <p className={styles.title}>{todo.title}</p>
                   </li>

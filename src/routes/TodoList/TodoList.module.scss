@@ -11,7 +11,7 @@
   // padding: 120px 40px 40px;
   background-color: #fafbfe;
   border-radius: 60px;
-  overflow: scroll;
+  overflow: hidden;
 
   h1 {
     font-size: 32px;
@@ -112,6 +112,10 @@
       letter-spacing: 0.05em;
     }
   }
+  .tasks {
+    height: 300px;
+    overflow-y: scroll;
+  }
   .task {
     display: flex;
     align-items: center;
@@ -124,6 +128,9 @@
     transition: 0.2s;
     + .task {
       margin-top: 18px;
+    }
+    + :last-child{
+      margin-bottom: 40px;
     }
 
     .checkboxWrapper {
@@ -149,9 +156,8 @@
       width: 28px;
       height: 28px;
       cursor: pointer;
-      border: 2px solid colors.$BLUE;
+      // border: 2px solid colors.$BLUE;
       border-radius: 50%;
-      transition: 0.2s;
 
       &:checked {
         border: 0;
