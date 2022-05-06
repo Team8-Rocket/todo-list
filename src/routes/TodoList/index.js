@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
 import { useHorizontalScroll } from './useSideScroll'
-// import {cx} from '../../styles'
-// import classNames from 'classnames'
 
 import classNames from 'classnames/bind'
 
@@ -74,9 +72,7 @@ function TodoList() {
 
   const [today, setToday] = useState(new Date())
 
-  const handleAddClick = (e) => {
-    // console.log('handleAddClick')
-  }
+  const handleAddClick = (e) => {}
 
   const handleChange = (e) => {
     const { dataset, checked } = e.currentTarget
