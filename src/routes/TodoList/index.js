@@ -66,7 +66,7 @@ function TodoList() {
         <ul className={styles.tasks}>
           <p className={styles.tasksTitle}>Today&apos;s</p>
           {todoList.map((todo) => (
-            <div className={styles.wrapTodo}>
+            <div key={`todoWrap-${todo.id}`} className={styles.wrapTodo}>
               <li key={`todo-${todo.id}`} className={cx(styles.task, {[styles.slide] : isTaskLeft && taskId === todo.id})}>
                 <div className={styles.checkboxWrapper}>
                   <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
