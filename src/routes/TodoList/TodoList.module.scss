@@ -8,6 +8,7 @@
   width: 360px;
   height: 720px;
   padding: 120px 40px 40px;
+  overflow: hidden;
   background-color: #fafbfe;
   border-radius: 60px;
 
@@ -26,7 +27,33 @@
     letter-spacing: 0.05em;
   }
 
+  .wrapTodo {
+    position: relative;
+  }
+
+  .taskSlide.slide {
+    right: -216px;
+  }
+
+  .taskSlide {
+    @include flexbox.flexbox(center center);
+    position: relative;
+    top: -46px;
+    right: -350px;
+    width: 15px;
+    height: 18px;
+    font-size: 15px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .task.slide {
+    left: -77px;
+    transition: all 0.3s ease-in-out;
+  }
+
   .task {
+    position: relative;
+    left: 0;
     display: flex;
     align-items: center;
     height: 72px;
@@ -34,6 +61,7 @@
     background-color: colors.$WHITE;
     border-radius: 32px;
     box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
+    transition: all 0.3s ease-in-out;
 
     + .task {
       margin-top: 18px;
@@ -76,12 +104,37 @@
       }
     }
 
+    .wrapTouch {
+      position: absolute;
+      left: 70px;
+      width: 210px;
+      height: 72px;
+      line-height: 72px;
+      cursor: default;
+    }
+
     .title {
       overflow: hidden;
       color: colors.$TASK_ITEM_TITLE;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  .editButton {
+    padding: 18px 16px;
+    color: colors.$WHITE;
+    background-color: #cdcdcd;
+    border-radius: 10px 0 0 10px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .deleteButton {
+    padding: 18px 16px;
+    color: colors.$WHITE;
+    background-color: #ff6b6b;
+    border-radius: 0 10px 10px 0;
+    transition: all 0.3s ease-in-out;
   }
 
   .addButton {

@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon } from '../../assets/svgs'
+import classNames from 'classnames/bind'
+
+const cx = classNames.bind(styles)
 
 const INIT_TODO = [
   {
@@ -22,6 +25,23 @@ const INIT_TODO = [
 
 function TodoList() {
   const [todoList, setTodoList] = useState(INIT_TODO)
+  const [isTaskLeft, setIsTaskLeft] = useState(false)
+  const [taskId, setTaskId] = useState(0)
+
+  const handleTodoClick = (e, todoId) => {
+    setIsTaskLeft((prev)=>!prev)
+    setTaskId(()=>todoId)
+  }
+
+  const handleEditClick = () => {
+    setIsTaskLeft((prev)=>!prev)
+  }
+  
+  const handleDeleteClick = () => {
+    const deletedTodoList = todoList.filter(todo => taskId !== todo.id)
+    setTimeout(() => {setTodoList(()=>deletedTodoList)}, 200)
+    setIsTaskLeft((prev)=>!prev)
+  }
 
   const handleAddClick = (e) => {
     // console.log('handleAddClick')
@@ -46,13 +66,20 @@ function TodoList() {
         <ul className={styles.tasks}>
           <p className={styles.tasksTitle}>Today&apos;s</p>
           {todoList.map((todo) => (
-            <li key={`todo-${todo.id}`} className={styles.task}>
-              <div className={styles.checkboxWrapper}>
-                <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
-                <CheckIcon />
+            <div className={styles.wrapTodo}>
+              <li key={`todo-${todo.id}`} className={cx(styles.task, {[styles.slide] : isTaskLeft && taskId === todo.id})}>
+                <div className={styles.checkboxWrapper}>
+                  <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
+                  <CheckIcon />
+                </div>
+                <button type='button' className={styles.wrapTouch} onClick={(e) => handleTodoClick(e, todo.id)} aria-label='Todo Slide button'/>
+                <p className={styles.title}>{todo.title}</p>
+              </li>
+              <div className={cx(styles.taskSlide, {[styles.slide] : isTaskLeft && taskId === todo.id})}>
+                <button type='button' className={styles.editButton} onClick={handleEditClick}>Edit</button>
+                <button type='button' className={styles.deleteButton} onClick={handleDeleteClick}>Del </button>
               </div>
-              <p className={styles.title}>{todo.title}</p>
-            </li>
+            </div>
           ))}
         </ul>
         <button type='button' className={styles.addButton} onClick={handleAddClick} aria-label='Add button' />
