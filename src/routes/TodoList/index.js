@@ -1,28 +1,63 @@
 import { useState } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon } from '../../assets/svgs'
+import { useHorizontalScroll } from './useSideScroll'
+
+const INIT_CATEGORY = ['Study', 'Business', 'Personal', 'Exercise', 'Etc']
+
+const CATEGORY_COLOR = { Study: 'red', Business: 'blue', Personal: 'purple', Exercise: 'gold', Etc: 'orange' }
 
 const INIT_TODO = [
   {
     id: 1,
     title: '계란 2판 사기',
+    category: 'Study',
+    deadLine: '2022-05-06',
     done: false,
   },
   {
     id: 2,
-    title: '맥북 프로 M1 Max CTO 버전 사기',
+    title: '연봉 4000만원 받기',
+    category: 'Business',
+    deadLine: '2022-05-09',
     done: false,
   },
   {
     id: 3,
-    title: '오늘의 TIL 작성하기',
+    title: '헬스장 가서 운동하기',
+    category: 'Exercise',
+    deadLine: '2022-05-11',
+    done: false,
+  },
+  {
+    id: 4,
+    title: 'TypeScript 공부하기',
+    category: 'Study',
+    deadLine: '2022-05-06',
+    done: false,
+  },
+  {
+    id: 5,
+    title: '등산 가기',
+    category: 'Etc',
+    deadLine: '2022-05-06',
+    done: false,
+  },
+  {
+    id: 6,
+    title: '서점 가기',
+    category: 'Etc',
+    deadLine: '2022-05-06',
     done: false,
   },
 ]
 
-function TodoList() {
-  const [todoList, setTodoList] = useState(INIT_TODO)
+const CATEGORY_WIDTH = 190;
 
+function TodoList() {
+  const [category, setCategory] = useState(INIT_CATEGORY)
+  const [todoList, setTodoList] = useState(INIT_TODO)
+  const [filterCategory, setFilterCategory] = useState('All')
   const handleAddClick = (e) => {
     // console.log('handleAddClick')
   }
@@ -30,7 +65,6 @@ function TodoList() {
   const handleChange = (e) => {
     const { dataset, checked } = e.currentTarget
     const { id } = dataset
-
     setTodoList((prev) => {
       const targetIndex = prev.findIndex((todo) => todo.id === Number(id))
       const newList = [...prev]
@@ -39,22 +73,71 @@ function TodoList() {
     })
   }
 
+  const handleFilterCategory = (e) => {
+    const { dataset } = e.currentTarget
+    const { value } = dataset
+    filterCategory === value ? setFilterCategory('All') : setFilterCategory(value)
+  }
+
+  const checkArrayCategory = (arr, keyword) => {
+    return arr.filter((obj) => obj.category === keyword)
+  }
+  const checkArrayDone = (arr, keyword) => {
+    const newArr = checkArrayCategory(arr, keyword)
+    return (newArr.filter((obj) => obj.done ).length / newArr.length)*100
+  }
+  const scrollRef = useHorizontalScroll()
+
   return (
     <div className={styles.todoList}>
       <div className={styles.centering}>
         <h1>Hi! this is your assignment.</h1>
+
+        <p className={styles.categoryTitle}>Categories</p>
+        <div className={styles.categoriesWrapper} ref={scrollRef}>
+          <ul className={styles.categories} style={{width: `${(CATEGORY_WIDTH*category.length)+70}px`}}>
+            {category.map((item, idx) => (
+              <li key={`category-${category[idx]}`} className={styles.category} data-value={item} onClick={handleFilterCategory} role='presentation' >
+                <p className={styles.categoriesCount}>{checkArrayCategory(todoList, item).length} tasks</p>
+                <p className={styles.categoriesTitle}>{item}</p>
+                <div className={styles.progressBar} style={{width :`${checkArrayDone(todoList, item)}%`, backgroundColor :`${CATEGORY_COLOR[item]}`}}>
+                  <span style={{backgroundColor :`${CATEGORY_COLOR[item]}`}}> </span>
+                </div>
+                <div className={styles.bar}/>
+              </li>
+            ))}
+          </ul>
+        </div>
+
         <ul className={styles.tasks}>
-          <p className={styles.tasksTitle}>Today&apos;s</p>
-          {todoList.map((todo) => (
-            <li key={`todo-${todo.id}`} className={styles.task}>
-              <div className={styles.checkboxWrapper}>
-                <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} />
-                <CheckIcon />
-              </div>
-              <p className={styles.title}>{todo.title}</p>
-            </li>
-          ))}
+          <p className={styles.tasksTitle}>Today&apos;s <span>{filterCategory}</span></p>
+          {filterCategory === 'All' ? 
+            todoList.map((todo) => (
+              <li key={`todo-${todo.id}`} className={styles.task}>
+                <div className={styles.checkboxWrapper}>
+                  <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={{border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
+                  <CheckIcon style={{color :`${CATEGORY_COLOR[todo.category]}`}}/>
+                </div>
+                <p className={styles.title}>{todo.title}</p>
+              </li>
+            ))
+            :
+            todoList.map((todo) => {
+              return (
+                filterCategory === todo.category ? 
+                  <li key={`todo-${todo.id}`} className={styles.task}>
+                    <div className={styles.checkboxWrapper}>
+                      <input type='checkbox' checked={todo.done} data-id={todo.id} onChange={handleChange} className={todo.category.toLowerCase()} style={{border :`2px solid ${CATEGORY_COLOR[todo.category]}`}}/>
+                      <CheckIcon style={{color :`${CATEGORY_COLOR[todo.category]}`}}/>
+                    </div>
+                    <p className={styles.title}>{todo.title}</p>
+                  </li>
+                  : null
+              )
+            })              
+          }
         </ul>
+
         <button type='button' className={styles.addButton} onClick={handleAddClick} aria-label='Add button' />
       </div>
     </div>
