@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
@@ -59,6 +60,8 @@ const INIT_TODO = [
 const CATEGORY_WIDTH = 190
 
 function TodoList() {
+  const [theme, setTheme] = useState(true)
+
   const [category, setCategory] = useState(INIT_CATEGORY)
   const [todoList, setTodoList] = useState(INIT_TODO)
   const [filterCategory, setFilterCategory] = useState('All')
@@ -73,6 +76,10 @@ function TodoList() {
   const [today, setToday] = useState(new Date())
 
   const handleAddClick = (e) => {}
+
+  const handleChangeTheme = () => {
+    setTheme(!theme)
+  }
 
   const handleChange = (e) => {
     const { dataset, checked } = e.currentTarget
@@ -170,7 +177,7 @@ function TodoList() {
   }, [todoList])
 
   return (
-    <div className={styles.todoList} data-theme='dark'>
+    <div className={styles.todoList} data-theme={theme ? 'light' : 'dark'}>
       <div
         className={`${styles.searchBox} 
           ${isSearchClicked ? styles.clicked : ''}`}
@@ -187,6 +194,15 @@ function TodoList() {
       </div>
 
       <Magnify className={styles.magnify} onClick={handleSearchClick} />
+
+      <div type='button' className={styles.themeBtn} onClick={handleChangeTheme}>
+        {theme ? (
+          <span className='material-symbols-outlined'>light_mode</span>
+        ) : (
+          <span className='material-symbols-outlined'>dark_mode</span>
+        )}
+      </div>
+
       <div className={styles.centering}>
         <h1 className={styles.greetings}>Hi! this is your assignment.</h1>
 
