@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import uuid from 'react-uuid'
 import { AiOutlineClose } from 'react-icons/ai'
 import { MdKeyboardArrowUp, MdOutlineEditCalendar } from 'react-icons/md'
+import { Circle } from '../../assets/svgs'
 import TodoListContext from '../../store/todoList-context'
 import { dateFormatter } from '../../utils'
 import styles from './AddTodo.module.scss'
@@ -11,6 +12,13 @@ import classNames from 'classnames/bind'
 const cx = classNames.bind(styles)
 
 const CATEGORY_LIST = ['Study', 'Business', 'Personal', 'Exercise', 'Etc']
+const CATEGORY_COLOR = {
+  Study: 'red',
+  Business: 'blue',
+  Personal: 'purple',
+  Exercise: 'gold',
+  Etc: 'orange',
+}
 const TODAY = dateFormatter(new Date())
 
 function AddTodo() {
@@ -31,11 +39,13 @@ function AddTodo() {
     setDeadline(e.currentTarget.value)
   }
 
-  const handleToggleOption = () => setShowOptions((prev) => !prev)
+  const handleToggleOption = () => {
+    setShowOptions((prev) => !prev)
+  }
 
   const handleSelectCategory = (e) => {
     setCategory(e.currentTarget.name)
-    handleToggleOption()
+    setShowOptions((prev) => !prev)
   }
 
   const handleSubmitTodo = (e) => {
@@ -103,7 +113,8 @@ function AddTodo() {
             className={cx(styles.optionTitle, category.toLocaleLowerCase())}
             onClick={handleToggleOption}
           >
-            {category}
+            <Circle fill={CATEGORY_COLOR[category]} />
+            <span className={styles.categorName}>{category}</span>
           </button>
           {showOptions && (
             <div className={styles.optionsWrapper}>
@@ -115,7 +126,12 @@ function AddTodo() {
                     onClick={handleSelectCategory}
                     name={categoryName}
                   >
-                    {categoryName}
+                    <Circle
+                      fill={CATEGORY_COLOR[categoryName]}
+                      onClick={handleSelectCategory}
+                      data-category={CATEGORY_COLOR[categoryName]}
+                    />
+                    <span className={styles.categorName}>{categoryName}</span>
                   </button>
                 </div>
               ))}

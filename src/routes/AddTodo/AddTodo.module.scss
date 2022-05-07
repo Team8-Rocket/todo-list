@@ -111,29 +111,25 @@
       @include flexbox.flexbox;
       @include visual.boxTitle;
       flex: 1;
-      height: 100%;
-      margin-left: 0;
       color: colors.$TASKS_TITLE;
+    }
 
-      &::before {
-        @include visual.beforeCircle;
-      }
+    .categorName {
+      margin-left: 6px;
     }
 
     .optionsWrapper {
       position: absolute;
       top: 120%;
-      @include flexbox.flexbox;
-      flex-direction: column;
       width: 100%;
       border: 2px solid #e4e7ee;
       border-radius: 1em;
+      transition: height 0.5s;
 
       .option {
         @include flexbox.flexbox;
         width: 100%;
         @include visual.boxTitle;
-        margin-left: 0;
 
         button {
           @include flexbox.flexbox;
