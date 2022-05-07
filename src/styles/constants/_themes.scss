@@ -3,35 +3,37 @@
 // LIGHTMODE
 $LIGHT_BACKGROUND_OUTSIDE: #d9dff8;
 $LIGHT_BACKGROUND_INSIDE: #f4f6fd;
-$LIGHT_BACKGROUND_TASK: #ffffff;
-$LIGHT_TITLE: #373b5e;
-$LIGHT_SUBTITLE: #b4bbce;
-$LIGHT_DEFAULT: #020417;
-$LIGHT_ADD_BUTTON: #066aff;
+// $LIGHT_BACKGROUND_TASK: #ffffff;
+$LIGHT_TITLE: #1f315b;
+// $LIGHT_SUBTITLE: #b4bbce;
+// $LIGHT_DEFAULT: #020417;
+// $LIGHT_DEFAULT: #4f566f;
+// $LIGHT_ADD_BUTTON: #066aff;
 
 // DARKMODE
 $DARK_BACKGROUND_OUTSIDE: #d9dff8;
 $DARK_BACKGROUND_INSIDE: #373b5e;
-$DARK_BACKGROUND_TASK: #ecf0f1;
+// $DARK_BACKGROUND_TASK: #ffffff;
 $DARK_TITLE: #f4f6fd;
-$DARK_SUBTITLE: #b4bbce;
-$DARK_DEFAULT: #f4f6fe;
-$DARK_ADD_BUTTON: #066aff;
+// $DARK_SUBTITLE: #b4bbce;
+// $DARK_DEFAULT: #f4f6fe;
+// $DARK_DEFAULT: #4f566f;
+// $DARK_ADD_BUTTON: #066aff;
 
 div.todoList[data-theme='light'] {
-  --color-subtitle: #{$LIGHT_SUBTITLE};
+  // --color-subtitle: #{$LIGHT_SUBTITLE};
   --color-title: #{$LIGHT_TITLE};
-  --color-text: #{$LIGHT_DEFAULT};
+  // --color-text: #{$LIGHT_DEFAULT};
   --color-background: #{$LIGHT_BACKGROUND_INSIDE};
-  --color-background-task: #{$LIGHT_BACKGROUND_TASK};
-  --color-add-button: #{$LIGHT_ADD_BUTTON};
+  // --color-background-task: #{$LIGHT_BACKGROUND_TASK};
+  // --color-add-button: #{$LIGHT_ADD_BUTTON};
 }
 
 div.todoList[data-theme='dark'] {
-  --color-subtitle: #{$DARK_SUBTITLE};
+  // --color-subtitle: #{$DARK_SUBTITLE};
   --color-title: #{$DARK_TITLE};
-  --color-text: #{$DARK_DEFAULT};
+  // --color-text: #{$DARK_DEFAULT};
   --color-background: #{$DARK_BACKGROUND_INSIDE};
-  --color-background-task: #{$DARK_BACKGROUND_TASK};
-  --color-add-button: #{$DARK_ADD_BUTTON};
+  // --color-background-task: #{$DARK_BACKGROUND_TASK};
+  // --color-add-button: #{$DARK_ADD_BUTTON};
 }

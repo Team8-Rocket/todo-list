@@ -170,7 +170,7 @@ function TodoList() {
   }, [todoList])
 
   return (
-    <div className={styles.todoList} data-theme='light'>
+    <div className={styles.todoList} data-theme='dark'>
       <div
         className={`${styles.searchBox} 
           ${isSearchClicked ? styles.clicked : ''}`}
