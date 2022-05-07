@@ -40,7 +40,7 @@ function TodoList() {
   }
 
   return (
-    <div className={styles.todoList}>
+    <div className={styles.todoList} data-theme='dark'>
       <div className={styles.centering}>
         <h1>Hi! this is your assignment.</h1>
         <ul className={styles.tasks}>
