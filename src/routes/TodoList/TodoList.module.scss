@@ -2,26 +2,28 @@
 @use '/src/styles/constants/levels';
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/position';
+@use '/src/styles/constants/themes';
 
 .todoList {
   position: relative;
   width: 360px;
   height: 720px;
   padding: 120px 40px 40px;
-  background-color: #fafbfe;
+  // background-color: colors.$DARK_BACKGROUND_INSIDE;
+  background-color: var(--color-background);
   border-radius: 60px;
 
   h1 {
     font-size: 32px;
     font-weight: 600;
-    color: colors.$BIG_TITLE;
+    color: var(--color-title);
   }
 
   .tasksTitle {
     margin: 30px 0 24px;
     font-size: 12px;
     font-weight: 600;
-    color: colors.$TASKS_TITLE;
+    color: var(--color-subtitle);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -31,7 +33,7 @@
     align-items: center;
     height: 72px;
     line-height: 72px;
-    background-color: colors.$WHITE;
+    background-color: var(--color-background-task);
     border-radius: 32px;
     box-shadow: 0 10px 20px 0 rgba(colors.$BLACK, 2%);
 
