@@ -2,10 +2,10 @@ import { useState, useEffect, useContext } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
 import { useHorizontalScroll } from './useSideScroll'
-
 import classNames from 'classnames/bind'
 import { useNavigate } from 'react-router-dom'
 import TodoListContext from '../../store/todoList-context'
+import themeContext from '../../store/theme-context'
 
 const cx = classNames.bind(styles)
 
@@ -17,8 +17,8 @@ const CATEGORY_WIDTH = 190
 
 function TodoList() {
   const { todoList, dispatchTodoList } = useContext(TodoListContext)
+  const { theme, setTheme } = useContext(themeContext)
   const [category] = useState(INIT_CATEGORY)
-  const [theme, setTheme] = useState(true)
   const [filterCategory, setFilterCategory] = useState('All')
 
   const [isTaskLeft, setIsTaskLeft] = useState(false)
