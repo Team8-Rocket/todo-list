@@ -2,19 +2,22 @@
 @use '/src/styles/mixins/position';
 @use '/src/styles/mixins/flexbox';
 @use '/src/styles/mixins/visual';
+@use '/src/styles/constants/themes';
 
 .todoList {
   position: relative;
   width: 360px;
   height: 720px;
   padding: 250px 40px 40px;
-  background-color: #fafbfe;
+  background-color: var(--color-background);
+  // background-color: #fafbfe;
   border-radius: 60px;
 
   .closeButton {
     position: absolute;
     top: 55px;
     right: 40px;
+    background-color: themes.$LIGHT_BACKGROUND_INSIDE;
     @include visual.whiteButton(3em, 50%);
 
     svg {
@@ -30,7 +33,7 @@
     width: 100%;
     font-size: 1.4rem;
     font-weight: 600;
-    color: colors.$BIG_TITLE;
+    color: var(--color-title);
 
     &::placeholder {
       color: colors.$TASKS_TITLE;
@@ -66,6 +69,7 @@
   }
 
   .calendarBox {
+    background-color: themes.$LIGHT_BACKGROUND_INSIDE;
     @include visual.whiteBox;
 
     .dateInput {
@@ -104,14 +108,17 @@
   }
 
   .categoryBox {
-    @include visual.whiteBox(7em);
     margin-left: 1em;
+    background-color: themes.$LIGHT_BACKGROUND_INSIDE;
+    @include visual.whiteBox(7em);
 
     .optionTitle {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      color: colors.$TASKS_TITLE;
       @include flexbox.flexbox;
       @include visual.boxTitle;
-      flex: 1;
-      color: colors.$TASKS_TITLE;
     }
 
     .categorName {
@@ -122,22 +129,25 @@
       position: absolute;
       top: 120%;
       width: 100%;
+      background-color: themes.$LIGHT_BACKGROUND_INSIDE;
       border: 2px solid #e4e7ee;
       border-radius: 1em;
       transition: height 0.5s;
 
       .option {
-        @include flexbox.flexbox;
         width: 100%;
+        height: 100%;
+        @include flexbox.flexbox;
         @include visual.boxTitle;
 
         button {
-          @include flexbox.flexbox;
           width: 100%;
           padding: 1em;
-          @include visual.boxTitle;
           font-size: 1em;
+          line-height: 100%;
           color: colors.$TASKS_TITLE;
+          @include flexbox.flexbox;
+          @include visual.boxTitle;
         }
 
         &:hover {

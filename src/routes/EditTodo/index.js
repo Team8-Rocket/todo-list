@@ -7,6 +7,7 @@ import TodoListContext from '../../store/todoList-context'
 import { dateFormatter } from '../../utils'
 import styles from './EditTodo.module.scss'
 import classNames from 'classnames/bind'
+import themeContext from '../../store/theme-context'
 
 const cx = classNames.bind(styles)
 
@@ -21,6 +22,7 @@ const CATEGORY_COLOR = {
 const TODAY = dateFormatter(new Date())
 
 function AddTodo() {
+  const { theme } = useContext(themeContext)
   const { dispatchTodoList } = useContext(TodoListContext)
   const { targetTodo } = useLocation().state
   const [title, setTitle] = useState(targetTodo.title)
@@ -70,12 +72,13 @@ function AddTodo() {
   })
 
   return (
-    <div className={styles.todoList}>
+    <div className={styles.todoList} data-theme={theme ? 'light' : 'dark'}>
       <button type='button' className={styles.closeButton} onClick={handleClose} aria-label='close-button'>
         <AiOutlineClose />
       </button>
       <form action='' onSubmit={handleSubmitTodo}>
         <input
+          data-theme={theme ? 'light' : 'dark'}
           className={styles.taskInput}
           type='text'
           placeholder='Enter new task'
@@ -91,6 +94,7 @@ function AddTodo() {
         <div className={styles.calendarBox}>
           <MdOutlineEditCalendar />
           <input
+            data-theme={theme ? 'light' : 'dark'}
             type='date'
             value={deadline}
             min={TODAY}
