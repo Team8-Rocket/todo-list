@@ -90,11 +90,15 @@ function TodoList() {
   }
 
   const deboucingSearch = (text) => {
+    const value = text.replace(' ', '')
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
+    if(value === ''){
+      return
+    }
     const newTimer = setTimeout(async () => {
-      await search(text)
+      await search(value)
     }, 200)
     setDebounceTimer(newTimer)
   }
