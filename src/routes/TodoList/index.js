@@ -203,11 +203,12 @@ function TodoList() {
                       className={styles.wrapTouch}
                       onClick={(e) => handleTodoClick(e, todo.id)}
                       aria-label='Todo Slide button'
-                    />
-                    <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
-                    <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
-                      {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
-                    </span>
+                    >
+                      <p className={classNames(styles.title, { [styles.done]: todo.done })}>{todo.title}</p>
+                      <span className={classNames(styles.dDay, { [styles.dayRed]: day < 3 })}>
+                        {day > 0 ? `D-${day}` : `D+${Math.abs(day)}`}
+                      </span>
+                    </button>
                   </li>
                   <div className={cx(styles.taskSlide, { [styles.slide]: isTaskLeft && taskId === todo.id })}>
                     <button data-id={todo.id} type='button' className={styles.editButton} onClick={handleClickEdit}>

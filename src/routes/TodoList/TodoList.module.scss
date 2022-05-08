@@ -314,7 +314,7 @@ $CATEGORY_COLOR: (
     .wrapTouch {
       position: absolute;
       left: 70px;
-      z-index: levels.$INDEX_FIRST;
+      // z-index: levels.$INDEX_FIRST;
       width: 210px;
       height: 72px;
       line-height: 72px;
@@ -326,6 +326,7 @@ $CATEGORY_COLOR: (
       padding: 0 10px;
       overflow: hidden;
       color: colors.$TASK_ITEM_TITLE;
+      text-align: left;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
