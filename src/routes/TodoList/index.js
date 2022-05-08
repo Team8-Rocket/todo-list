@@ -81,21 +81,11 @@ function TodoList() {
     return (newArr.filter((obj) => obj.done).length / newArr.length) * 100
   }
 
-  const search = (value) => {
-    const newTodo = todoList.filter((ele) => {
-      const title = ele.title.replace(' ', '').toLowerCase()
-      const newValue = value.replace(' ', '')[0].toLowerCase()
-      return title.includes(newValue)
-    })
-  }
-
-  const deboucingSearch = (text) => {
+  const deboucingSearch = () => {
     if (debounceTimer) {
       clearTimeout(debounceTimer)
     }
-    const newTimer = setTimeout(async () => {
-      await search(text)
-    }, 200)
+    const newTimer = setTimeout(async () => {}, 200)
     setDebounceTimer(newTimer)
   }
 

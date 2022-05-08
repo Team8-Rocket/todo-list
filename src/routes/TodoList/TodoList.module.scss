@@ -314,6 +314,7 @@ $CATEGORY_COLOR: (
     .wrapTouch {
       position: absolute;
       left: 70px;
+      z-index: levels.$INDEX_FIRST;
       width: 210px;
       height: 72px;
       line-height: 72px;
