@@ -1,5 +1,6 @@
 # 기능목록
 ## TodoList
+[todoList 확인하기 (Netlify)](https://inspiring-melomakarona-e4c1c2.netlify.app/)
 ### 카테고리 가로스크롤
 -> useRef 훅을 사용하여 스크롤 할 DOM을 선택하여 해당 DOM에서 onWheel이라는 이벤트 함수를 적용해서 스크롤을 감지하여 가로로 이동하게 하였다.  
 ### 카테고리 별 목표 달성시 해당 프로세스 바 채워짐
