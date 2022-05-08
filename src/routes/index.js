@@ -1,5 +1,6 @@
-import { useMemo, useReducer } from 'react'
+import { useMemo, useReducer, useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import themeContext from '../store/theme-context'
 import TodoListContext from '../store/todoList-context'
 import { todoListReducer } from '../utils/reducer'
 import AddTodo from './AddTodo'
@@ -54,6 +55,7 @@ const INIT_TODO = [
 
 function App() {
   const [todoList, dispatchTodoList] = useReducer(todoListReducer, INIT_TODO)
+  const [theme, setTheme] = useState(true)
 
   return (
     <div className={styles.app}>
@@ -66,13 +68,23 @@ function App() {
           [todoList]
         )}
       >
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<TodoList />} />
-            <Route path='add' element={<AddTodo />} />
-            <Route path='edit' element={<EditTodo />} />
-          </Routes>
-        </BrowserRouter>
+        <themeContext.Provider
+          value={useMemo(
+            () => ({
+              theme,
+              setTheme,
+            }),
+            [theme]
+          )}
+        >
+          <BrowserRouter>
+            <Routes>
+              <Route path='/' element={<TodoList />} />
+              <Route path='add' element={<AddTodo />} />
+              <Route path='edit' element={<EditTodo />} />
+            </Routes>
+          </BrowserRouter>
+        </themeContext.Provider>
       </TodoListContext.Provider>
     </div>
   )
