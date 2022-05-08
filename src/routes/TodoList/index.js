@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useContext } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
@@ -18,6 +19,7 @@ const CATEGORY_WIDTH = 190
 function TodoList() {
   const { todoList, dispatchTodoList } = useContext(TodoListContext)
   const [category] = useState(INIT_CATEGORY)
+  const [theme, setTheme] = useState(true)
   const [filterCategory, setFilterCategory] = useState('All')
 
   const [isTaskLeft, setIsTaskLeft] = useState(false)
@@ -33,6 +35,10 @@ function TodoList() {
 
   const handleClickAdd = () => navigate('add')
 
+  const handleChangeTheme = () => {
+    setTheme(!theme)
+  }
+  
   const handleChangeDone = (e) => {
     const { dataset, checked } = e.currentTarget
     const { id } = dataset
@@ -127,7 +133,7 @@ function TodoList() {
   }, [todoList])
 
   return (
-    <div className={styles.todoList}>
+    <div className={styles.todoList} data-theme={theme ? 'light' : 'dark'}>
       <div className={cx(styles.searchBox, { [styles.clicked]: isSearchClicked })}>
         <input
           className={cx(styles.searchInput, { [styles.clicked]: isSearchClicked })}
@@ -139,6 +145,14 @@ function TodoList() {
         />
       </div>
       <Magnify className={styles.magnify} onClick={handleSearchClick} />
+
+      <div type='button' className={styles.themeBtn} onClick={handleChangeTheme}>
+        {theme ? (
+          <span className='material-symbols-outlined'>light_mode</span>
+        ) : (
+          <span className='material-symbols-outlined'>dark_mode</span>
+        )}
+      </div>
       <div className={styles.centering}>
         <h1 className={styles.greetings}>Hi! this is your assignment.</h1>
         <p className={styles.categoryTitle}>Categories</p>
