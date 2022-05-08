@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from 'react'
 import styles from './TodoList.module.scss'
 import { CheckIcon, Magnify } from '../../assets/svgs'
@@ -38,7 +37,7 @@ function TodoList() {
   const handleChangeTheme = () => {
     setTheme(!theme)
   }
-  
+
   const handleChangeDone = (e) => {
     const { dataset, checked } = e.currentTarget
     const { id } = dataset
@@ -146,13 +145,13 @@ function TodoList() {
       </div>
       <Magnify className={styles.magnify} onClick={handleSearchClick} />
 
-      <div type='button' className={styles.themeBtn} onClick={handleChangeTheme}>
+      <button type='button' className={styles.themeBtn} onClick={handleChangeTheme}>
         {theme ? (
           <span className='material-symbols-outlined'>light_mode</span>
         ) : (
           <span className='material-symbols-outlined'>dark_mode</span>
         )}
-      </div>
+      </button>
       <div className={styles.centering}>
         <h1 className={styles.greetings}>Hi! this is your assignment.</h1>
         <p className={styles.categoryTitle}>Categories</p>
