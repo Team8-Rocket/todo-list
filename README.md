@@ -1,23 +1,32 @@
 # 기능목록
+
 ## TodoList
 [todoList 확인하기 (Netlify)](https://inspiring-melomakarona-e4c1c2.netlify.app/)
 ### 카테고리 가로스크롤
--> useRef 훅을 사용하여 스크롤 할 DOM을 선택하여 해당 DOM에서 onWheel이라는 이벤트 함수를 적용해서 스크롤을 감지하여 가로로 이동하게 하였다.  
+- useRef 훅을 사용하여 스크롤 할 DOM을 선택하여 해당 DOM에서 onWheel이라는 이벤트 함수를 적용해서 스크롤을 감지하여 가로로 이동하게 하였다.  
+
+
 ### 카테고리 별 목표 달성시 해당 프로세스 바 채워짐
--> progressBar 와 bar를 만들어 겹치게 해놓고, progressBar의 width를 카테고리에 속한 todo 중 done이 true인 것의 개수를 카테고리에 속한 todo 개수로 나누어 *100을 하여 값을 지정해주었다.
+- progressBar 와 bar를 만들어 겹치게 해놓고, progressBar의 width를 카테고리에 속한 todo 중 done이 true인 것의 개수를 카테고리에 속한 todo 개수로 나누어 *100을 하여 값을 지정해주었다.
+
+
 ### 카테고리 클릭시 카테고리 별 투두 모아보기
-->  useState 훅을 사용하여 초기값을 전체 목록이 보이도록 ‘All’ 로 할당하고, 카테고리를 클릭할 때마다 데이터 속성인 data-value로 값을 받아온 뒤, setter 함수를 이용하여 카테고리 명으로 바뀌게 하였다. todoList는 reduce 함수를 사용하여 `(filterCategory === 'All' || filterCategory === todo.category) && todo.title.includes(searchValue)` 조건을 만족할때 추가하는 식으로 구현하였다.
+-  useState 훅을 사용하여 초기값을 전체 목록이 보이도록 ‘All’ 로 할당하고, 카테고리를 클릭할 때마다 데이터 속성인 data-value로 값을 받아온 뒤, setter 함수를 이용하여 카테고리 명으로 바뀌게 하였다. todoList는 reduce 함수를 사용하여 `(filterCategory === 'All' || filterCategory === todo.category) && todo.title.includes(searchValue)` 조건을 만족할때 추가하는 식으로 구현하였다.
 ### 투두 하나를 클릭 했을 때 [수정/삭제] 보이기
--> 투두 위에 투명한 버튼을 만들고, 화면 밖에 Edit와 Del 버튼을 만들었다.  버튼을 클릭하여 isTaskLeft(일정이 왼쪽으로 슬라이드 되어있는지 판별)를 Toggle한다. Toggle되면 투두는 왼쪽으로 이동하고 Edit와 Del 버튼이 화면 안쪽으로 이동하도록 구현하였다. `isTaskLeft && taskId === todo.id}` 조건으로  className을 넣어 클릭한 값만 이동하도록 하였다. 해당 className으로 위치 값을 조정하고  `transition` 효과를 넣어 부드럽게 이동하도록 하였다.
+
+
+- 투두 위에 투명한 버튼을 만들고, 화면 밖에 Edit와 Del 버튼을 만들었다.  버튼을 클릭하여 isTaskLeft(일정이 왼쪽으로 슬라이드 되어있는지 판별)를 Toggle한다. Toggle되면 투두는 왼쪽으로 이동하고 Edit와 Del 버튼이 화면 안쪽으로 이동하도록 구현하였다. `isTaskLeft && taskId === todo.id}` 조건으로  className을 넣어 클릭한 값만 이동하도록 하였다. 해당 className으로 위치 값을 조정하고  `transition` 효과를 넣어 부드럽게 이동하도록 하였다.
+
+
 ### 투두 삭제 버튼 클릭시 삭제 하기
--> [초기]: `todoList.filter(todo => taskId !== todo.id)` 다음과 같이 filter로 삭제 할 id가 아닌 id들을 찾고, 그 결과를 배열에 다시 넣어주었다.
--> [수정 후]: 기존의 todoList를 context로 전역으로 빼면서 `dispatchTodoList({ type: 'DELETE_TODO', id })`로 삭제를 관리한다.
+-  [초기]: `todoList.filter(todo => taskId !== todo.id)` 다음과 같이 filter로 삭제 할 id가 아닌 id들을 찾고, 그 결과를 배열에 다시 넣어주었다.
+-  [수정 후]: 기존의 todoList를 context로 전역으로 빼면서 `dispatchTodoList({ type: 'DELETE_TODO', id })`로 삭제를 관리한다.
 
 ### 투두 수정 버튼 클릭시 수정 하기
 -> `navigate('edit', { state: { targetTodo: todoList[targetIndex] } })`를 통해서 edit 페이지로 이동하면서, 변경을 원하는 todo 항목을 state로 전달한후 edit 페이지에서 `dispatchTodoList({ type: 'EDIT_TODO', id: targetTodo.id, title, deadline, category, done: targetTodo.done })`과정을 통해서 타겟 Todo만 변경하는 식으로 변경
 
 ### 다크모드 토글
--> 상태관리를 통해 아이콘 변경 및 테마 변경
+-  상태관리를 통해 아이콘 변경 및 테마 변경
 
 
 
